@@ -11,30 +11,47 @@ from bpy.props import BoolProperty
 HOST = "127.0.0.1"
 PORT = 8000
 
+server = None
+server_thread = None
+
 def launch_server():
-  server = SimpleXMLRPCServer((HOST, PORT))
-  server.register_function(list_objects)
-  server.register_function(import_obj)
-  server.register_function(eval_code)
-  server.serve_forever()
+    global server
+    server = SimpleXMLRPCServer((HOST, PORT), allow_none=True)
+    server.register_function(list_objects)
+    server.register_function(import_obj)
+    server.register_function(eval_code)
+    server.register_function(shutdown)
+    server.serve_forever()
 
 def server_start():
-  if not hasattr(bpy.types.Scene, "rpc_server_running"):
-    bpy.types.Scene.rpc_server_running = BoolProperty(
-      name="RPC Server Running",
-      description="Indicates whether the RPC server is currently running",
-      default=False
-    )
-  if not bpy.context.scene.rpc_server_running:
-    t = threading.Thread(target=launch_server)
-    t.daemon = True
-    t.start()
-    bpy.context.scene.rpc_server_running = True
+    global server_thread
+    if not hasattr(bpy.types.Scene, "rpc_server_running"):
+        bpy.types.Scene.rpc_server_running = BoolProperty(
+            name="RPC Server Running",
+            description="Indicates whether the RPC server is currently running",
+            default=False
+        )
+    if not bpy.context.scene.rpc_server_running:
+        server_thread = threading.Thread(target=launch_server)
+        server_thread.daemon = True
+        server_thread.start()
+        bpy.context.scene.rpc_server_running = True
 
 def server_stop():
-  bpy.context.scene.rpc_server_running = False
-  # Note: This doesn't actually stop the server thread.
-  # For a production addon, you'd need to implement a proper shutdown mechanism.
+    global server, server_thread
+    if bpy.context.scene.rpc_server_running:
+        bpy.context.scene.rpc_server_running = False
+        if server:
+            server.shutdown()
+        if server_thread:
+            server_thread.join()
+        server = None
+        server_thread = None
+
+def shutdown():
+    # This function will be called via RPC to stop the server
+    bpy.app.timers.register(server_stop, first_interval=0.1)
+    return "Server shutdown initiated"
 
 def list_objects():
   return bpy.data.objects.keys()
