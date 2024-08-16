@@ -14,6 +14,11 @@ PORT = 8000
 server = None
 server_thread = None
 
+a = None
+b = None
+c = None
+d = None
+
 def launch_server():
     global server
     server = SimpleXMLRPCServer((HOST, PORT), allow_none=True)
@@ -21,6 +26,10 @@ def launch_server():
     server.register_function(import_obj)
     server.register_function(eval_code)
     server.register_function(shutdown)
+    server.register_function(send_a)
+    server.register_function(send_b)
+    server.register_function(send_c)
+    server.register_function(send_d)
     server.serve_forever()
 
 def server_start():
@@ -62,6 +71,22 @@ def import_obj(path:str):
 
 def eval_code(code:str):
   return eval(code)
+
+def send_a(v):
+  a = v
+  return "OK"
+
+def send_b(v):
+  b = v
+  return "OK"
+
+def send_c(v):
+  c = v
+  return "OK"
+
+def send_d(v):
+  d = v
+  return "OK"
 
 
 # Define a class to handle toggling the RPC server
