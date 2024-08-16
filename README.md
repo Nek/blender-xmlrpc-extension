@@ -1,4 +1,6 @@
-# Blender RPC Control
+# Blender XMLRPC Extension
+
+ATTENTION: prototyping phase!
 
 This project provides a system for remote interaction with Blender using XML-RPC. It consists of a Python server that runs as a Blender addon and a Clojure client that can make calls to this server to perform operations in Blender remotely.
 
@@ -19,18 +21,17 @@ The system allows for automation of Blender operations, integration of Blender w
 ## Setup and Running
 
 1. Install the Blender addon:
-   - Copy the `rpc_server_addon` folder to Blender's addon directory.
-   - Enable the "RPC Server" addon in Blender's preferences.
+   - Choose manual installation method from Blender's preferences UI.
+   - Navigate to rpc_server_addon folder and approve.
 
 2. Start the RPC server in Blender:
-   - Open Blender.
    - In the 3D Viewport, find the "RPC Server" panel in the sidebar.
    - Click "Run Server" to start the XML-RPC server.
 
 3. Set up the Clojure client:
    - Ensure you have Clojure and the required dependencies installed.
    - Navigate to the `rpc-client-clj` directory.
-   - Run the client using your preferred method (e.g., `clj -M -m client`).
+   - Run the client using your preferred method (e.g., `clj -X client/main`).
 
 ## Available RPC Calls
 
