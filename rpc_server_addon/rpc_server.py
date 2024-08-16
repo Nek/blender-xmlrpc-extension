@@ -77,7 +77,7 @@ class RPCServerToggle(bpy.types.Operator):
 
 # Define the GUI panel
 class RPCServerPanel(bpy.types.Panel):
-  bl_label = "RPC Server Control"
+  bl_label = "Python XMLRPC Server"
   bl_idname = "VIEW3D_PT_rpc_server"
   bl_space_type = 'VIEW_3D'
   bl_region_type = 'UI'
@@ -85,9 +85,9 @@ class RPCServerPanel(bpy.types.Panel):
 
   def draw(self, context):
     layout = self.layout
-    scene = context.scene
-    layout.prop(scene, "rpc_server_running", text="Server Running")
-    layout.operator("wm.rpc_server_toggle", text="Toggle Server")
+    scene = context.scene   
+    label = "Stop Server" if scene.rpc_server_running else "Run Server"         
+    layout.operator("wm.rpc_server_toggle", text=label)
 
 # Register the operator and panel
 def register():
