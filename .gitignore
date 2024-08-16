@@ -3,3 +3,4 @@
 .editorconfig
 .lsp/
 rpc-client-clj/.cpcache
+.aider*
