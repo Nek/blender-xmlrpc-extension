@@ -7,6 +7,7 @@ from xmlrpc.server import SimpleXMLRPCServer
 import bpy
 import threading
 from bpy.props import BoolProperty
+import mathutils   
 
 HOST = "127.0.0.1"
 PORT = 8000
@@ -25,11 +26,11 @@ def launch_server():
     server.register_function(list_objects)
     server.register_function(import_obj)
     server.register_function(eval_code)
-    server.register_function(shutdown)
     server.register_function(send_a)
     server.register_function(send_b)
     server.register_function(send_c)
     server.register_function(send_d)
+    server.register_function(move_object)
     server.serve_forever()
 
 def server_start():
@@ -57,11 +58,6 @@ def server_stop():
         server = None
         server_thread = None
 
-def shutdown():
-    # This function will be called via RPC to stop the server
-    bpy.app.timers.register(server_stop, first_interval=0.1)
-    return "Server shutdown initiated"
-
 def list_objects():
   return bpy.data.objects.keys()
   
@@ -87,6 +83,14 @@ def send_c(v):
 def send_d(v):
   d = v
   return "OK"
+
+def move_object(object_name: str, x: float, y: float, z: float):                                                                                         
+    obj = bpy.data.objects.get(object_name)                                                                                                              
+    if obj is None:                                                                                                                                      
+        return f"Object '{object_name}' not found"                                                                                                       
+                                                                                                                                                        
+    obj.location = mathutils.Vector((x, y, z))                                                                                                           
+    return f"Moved '{object_name}' to position ({x}, {y}, {z})"    
 
 
 # Define a class to handle toggling the RPC server
