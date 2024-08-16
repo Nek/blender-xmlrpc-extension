@@ -1,0 +1,5 @@
+{:mvn/repos {"clojars" {:url "https://repo.clojars.org/"}
+             "central" {:url "https://repo1.maven.org/maven2/"}}
+ :paths     ["src" "resources"]
+ :deps      {org.clojure/clojure      {:mvn/version "1.11.1"}
+             necessary-evil/necessary-evil {:mvn/version "2.0.2"}}}

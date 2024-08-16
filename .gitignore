@@ -1,0 +1,5 @@
+.DS_Store
+.clj-kondo/
+.editorconfig
+.lsp/
+rpc-client-clj/.cpcache
