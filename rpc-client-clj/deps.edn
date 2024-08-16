@@ -1,5 +1,15 @@
 {:mvn/repos {"clojars" {:url "https://repo.clojars.org/"}
              "central" {:url "https://repo1.maven.org/maven2/"}}
  :paths     ["src" "resources"]
- :deps      {org.clojure/clojure      {:mvn/version "1.11.1"}
-             necessary-evil/necessary-evil {:mvn/version "2.0.2"}}}
+ :deps      {org.clojure/clojure      {:mvn/version "1.11.2"}
+             necessary-evil/necessary-evil {:mvn/version "2.0.2"}}
+ :aliases {:fastcall
+           {:jvm-opts ["-Dlibpython_clj.manual_gil=true"]}
+           :jdk-17
+           {;;   :exec-fn clojure.core.server/start-server
+                     ;;   :exec-args {:name "repl-server"
+                     ;;               :port 5555
+                     ;;               :accept clojure.core.server/repl
+                     ;;               :server-daemon false}
+            :jvm-opts ["--add-modules" "jdk.incubator.foreign"
+                       "--enable-native-access=ALL-UNNAMED"]}}}
